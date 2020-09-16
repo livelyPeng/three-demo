@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>买房好帮手-日照分析</title>
+    <!-- 引入样式文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.9/lib/index.css" />
+    <style>
+        html,
+        body,
+        #root,
+        .content-box,
+        #container {
+            margin: 0;
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            color: #111;
+            font-size: 16px;
+            padding: 0;
+            border: 0px;
+        }
+
+        div,
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .van-calendar__selected-day {
+            border-radius: 50%;
+            width: 1.875rem;
+            height: 1.875rem;
+        }
+
+        .van-calendar__header-title {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .van-calendar__header-subtitle {
+            text-align: left;
+            margin-left: .75rem;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .van-calendar__day,
+        .van-calendar__month-title,
+        .van-calendar__weekdays {
+            font-weight: bold;
+            font-size: .875rem;
+        }
+
+        .header-box {
+            position: fixed;
+            width: 100%;
+            top: .9375rem;
+            left: 0;
+        }
+
+        .header-box p {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(239, 239, 239, 0.2) 52%, rgba(255, 255, 255, 0) 100%);
+            padding: .5625rem 1.125rem;
+            text-align: center;
+            font-size: .9375rem;
+            font-weight: bold;
+            color: #fff;
+            position: relative;
+        }
+
+        .header-box p img {
+            position: absolute;
+            width: 1.625rem;
+            height: 1.625rem;
+            left: 1.0625rem;
+        }
+
+        #container {
+            background: #1E1F22;
+        }
+
+        #controls {
+            box-sizing: border-box;
+            position: fixed;
+            padding: .9375rem .75rem 0 .75rem;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            background: rgb(255, 255, 255);
+            font-weight: bold;
+        }
+
+        #controls #btn {
+            margin-top: 1.25rem;
+            padding-bottom: .625rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .title-box {
+            font-size: 1rem;
+            font-weight: bold;
+            padding-bottom: .25rem;
+        }
+
+        .title-box.title {
+            text-align: center;
+        }
+
+        .msg {
+            color: #000000;
+            margin: 0;
+            padding: .4375rem;
+            color: #fff;
+            font-weight: bold;
+            font-size: .75rem;
+            text-align: center;
+        }
+
+        .demo-date-picker {
+            margin: .5rem;
+        }
+
+        .default-box {
+            text-align: center;
+            font-size: .75rem;
+            font-weight: bold;
+        }
+
+        .default-box img {
+            width: 1.625rem;
+            height: 1.625rem;
+        }
+
+        .default-box .handleImg {
+            border-radius: 50%;
+            box-shadow: .0625rem .125rem 1.25rem -0.3125rem rgba(0, 0, 0, 0.5);
+        }
+
+        .van-slider__button-wrapper {
+            height: 1.625rem;
+        }
+
+        .currentTime {
+            width: 3.125rem;
+            height: 1.625rem;
+            line-height: 1.625rem;
+            text-align: center;
+            background-color: #F1F1F1;
+            border: .0625rem solid #DBDBDB;
+            border-radius: .104167rem;
+        }
+
+        .floor-box {
+            width: 100%;
+            overflow-x: scroll;
+            white-space: nowrap;
+            box-shadow: inset -1.875rem 0 .625rem -2rem rgba(0, 0, 0, 0.14);
+            padding-top: 1.25rem;
+            padding-bottom: .625rem;
+            margin-right: .625rem;
+        }
+
+        .date-box {
+            position: relative;
+        }
+
+        .date-box div {
+            position: absolute;
+            left: .75rem;
+            top: -3.875rem;
+            background-color: rgba(0, 0, 0, 0.34);
+            color: #fff;
+            font-weight: bold;
+            font-size: .9375rem;
+            padding: .5rem;
+            height: 2.25rem;
+            box-sizing: border-box;
+            border-radius: .1875rem;
+        }
+
+        .floors {
+            padding: .9375rem .75rem;
+            box-sizing: border-box;
+        }
+
+        .floors img {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .ceng-box {
+            margin-top: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-right: -0.625rem;
+            height: 9.8125rem;
+            overflow-y: scroll;
+        }
+
+        .ceng-box .tag {
+            width: 4.0625rem;
+            height: 2rem;
+            line-height: 2rem;
+            text-align: center;
+            border: .0625rem solid #DBDBDB;
+            border-radius: .125rem;
+            color: #111;
+            font-size: .75rem;
+            background-color: #fff;
+            flex-shrink: 0;
+            margin: 0.9375rem 0.625rem 0 0;
+        }
+
+        .ceng-box>i {
+            width: 4.0625rem;
+            margin-right: 0.625rem;
+        }
+
+
+        .ceng-box .tag.active {
+            border: .0625rem solid #FA7319;
+            color: #FA7319;
+        }
+
+        .van-dialog {
+            border-radius: .375rem;
+        }
+
+        .van-dialog__confirm {
+            font-weight: bold;
+        }
+
+        .tishiimg {
+            width: 19.6875rem;
+            height: 22.3125rem;
+        }
+
+        .btn {
+            border-radius: .25rem;
+            background-color: #F1F1F1;
+            border: none;
+            font-size: .875rem;
+            margin-bottom: .625rem;
+            padding: 0.875rem;
+        }
+
+        .btn.active {
+            background-color: #FA7319;
+            color: #fff;
+            box-shadow: 0px 4px 8px 0px rgba(255, 139, 48, 0.58);
+        }
+
+        .btn.floor {
+            margin-right: .25rem;
+        }
+
+        .van-overlay {
+            background-color: rgba(0, 0, 0, 0);
+        }
+
+        .van-popup {
+            overflow-y: hidden;
+        }
+
+        @media(max-width:540px) {
+            html {
+                font-size: 16px;
+            }
+        }
+
+        /*Android常用宽度*/
+        @media(max-width:480px) {
+            html {
+                font-size: 15px;
+            }
+        }
+
+        /*Android常用宽度*/
+        @media(max-width:414px) {
+            html {
+                font-size: 15px;
+            }
+        }
+
+        /*i6Plus,i7Plus宽度*/
+        @media(max-width:375px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        /*i6,i7宽度*/
+        @media(max-width:360px) {
+            html {
+                font-size: 13px;
+            }
+        }
+
+        /*Android常用宽度*/
+        @media(max-width:320px) {
+            html {
+                font-size: 12px;
+            }
+        }
+
+        /*i5宽度*/
+    </style>
+</head>
+
+<body>
+<div id="root">
+    <template>
+        <div class="content-box">
+            <div id="container"></div>
+            <div class="header-box">
+                <p>
+                    <img :style="'transform:rotate('+angle+'deg);'"
+                         src="https://sun-light-1258778894.cos.ap-shanghai.myqcloud.com/images/zbz.png">
+                    [{{name}}-日照分析]</p>
+            </div>
+            <div id="controls" @touchmove="touchmove($event)">
+                <div class="date-box" @click="handleRL">
+                    <div>{{dateValue.nowDate}} ▼</div>
+                </div>
+                <van-row type="flex" align="center" class="default-box">
+                    <van-col span="4">{{dateValue.riseTime}}</van-col>
+                    <van-col span="10">
+                        <van-slider @drag-start="handleDrag(false)" @drag-end="handleDrag(true)" bar-height="4px"
+                                    @input="sliderChange" v-model="dateValue.currentDate" :min="0" :max="dateValue.longTim"
+                                    active-color="#FA7319">
+                            <template #button>
+                                <img src="https://sun-light-1258778894.cos.ap-shanghai.myqcloud.com/images/ty.png">
+                            </template>
+                        </van-slider>
+                    </van-col>
+                    <van-col span="3">{{dateValue.dropTime}}</van-col>
+                    <van-col span="3" @click="handleBF">
+                        <img class="handleImg"
+                             :src="`https://sun-light-1258778894.cos.ap-shanghai.myqcloud.com/images/${play?'ztj':'bfj'}.png`">
+                    </van-col>
+                    <van-col span="3">
+                        <div class="currentTime">{{dateValue.showCurrentDate}}</div>
+                    </van-col>
+                </van-row>
+                <div id='btn'>
+                    <button v-for="(item,i) in solarTerms" :key="i"
+                            :class="`btn${item.lable==theDate?' active':''} floor`"
+                            @click="dateClick(item)">{{item.lable}}</button>
+                </div>
+                <!-- 2020.9.1产品迭代修改 -->
+                <!-- <div class="floor-box">
+                    <button class="btn floor" v-for="(item,i) in floorArr" :key="i"
+                        @click="handleClickFloor(item,i)">
+                        {{item.name.split('#')[0]}}# </button>
+                </div> -->
+            </div>
+            <div @touchmove="touchmove($event)">
+                <van-popup v-model="showFloor" position="bottom" class="floors">
+                    <!-- <p class="title-box title">楼层选择</p> -->
+                    <van-row justify="space-between" type="flex" align="center" style="margin-bottom: 0.75rem">
+                        <van-col span="12">
+                            <p class="title-box">
+                                {{selectBuild.name&&selectBuild.name.split('#')[0]}}#共{{selectBuild.floor}}层</p>
+                        </van-col>
+                        <van-col span="12"
+                                 style="text-align: right;align-items: center;display: flex;justify-content: flex-end;"
+                                 @click="showDialog = true">
+                            <span style="color:#767676;font-size:0.75rem;">日照时长&ensp;</span>
+                            <img src="https://sun-light-1258778894.cos.ap-shanghai.myqcloud.com/images/ts.png" />
+                        </van-col>
+                    </van-row>
+                    <van-row type="flex" align="center">
+                        <van-col span="3">
+                            <div class="msg" style="background: #bd0b18;">7~8h</div>
+                        </van-col>
+                        <van-col span="3">
+                            <div class="msg" style="background: #ea2121;">6~7h</div>
+                        </van-col>
+                        <van-col span="3">
+                            <div class="msg" style="background: #ff9419;">5~6h</div>
+                        </van-col>
+                        <van-col span="3">
+                            <div class="msg" style="background: #f9dd31;">4~5h</div>
+                        </van-col>
+                        <van-col span="3">
+                            <div class="msg" style="background: #6ad335;">3~4h</div>
+                        </van-col>
+                        <van-col span="3">
+                            <div class="msg" style="background: #1ec1ac;">2~3h</div>
+                        </van-col>
+                        <van-col span="3">
+                            <div class="msg" style="background: #308fd5;">1~2h</div>
+                        </van-col>
+                        <van-col span="3">
+                            <div class="msg" style="background: #3834c9;">0~1h</div>
+                        </van-col>
+                    </van-row>
+                    <div class="ceng-box">
+                        <button :class="`tag${floorArr[selectBuild.index].selectArr.includes(i)?' active':''}`"
+                                @click="handleFloor(i,floorArr[selectBuild.index].selectArr.includes(i))"
+                                v-for="(item,i) in selectBuild.floor" :key="i">
+                            {{i+1}}层 </button>
+                        <i></i><i></i><i></i><i></i><i></i><i></i>
+                    </div>
+                </van-popup>
+            </div>
+            <div @touchmove="touchmove($event)">
+                <van-calendar color="#FA7319" :round="false" :show-confirm="false" @close="handleClose"
+                              v-model="show" @select="onConfirm" :default-date="new Date(queryDat.currentTime)"
+                              :min-date="new Date(queryDat.years, 0, 1)" :max-date="new Date(queryDat.years, 11, 31)" />
+            </div>
+            <div @touchmove="touchmove($event)">
+                <van-dialog v-model="showDialog" width="19.6875rem" confirm-button-text="我知道了">
+                    <img class="tishiimg"
+                         src="https://sun-light-1258778894.cos.ap-shanghai.myqcloud.com/images/tishi.png">
+                </van-dialog>
+            </div>
+        </div>
+    </template>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+<script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.9/lib/vant.min.js"></script>
+<!--直接引入axios-->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!--three，本身就是一个插件了，没必须打包了。人家已经打包好了的es5了，直接引入即可-->
+<!--lib下面的文件不需要参与打包，因为本身就已经是打包了的es5了，直接引入即可-->
+<script src='lib/jquery.js'></script>
+<script src='lib/geometryExtrude.js'></script>
+<script src='lib/three.min.js'></script>
+<script src='lib/Tween.min.js'></script>
+<!--ThreeNode必须在这个位置，不能放上面去-->
+<!--为啥这个ThreeNode要单独打包呢？因为你需要外面实例化 new, 所以ThreeNode本身得当做一个插件-->
+<script src='js/ThreeNode.js'></script>
+<script>
+    var INT = null;
+    var instance = null;
+    const app = new Vue({
+        el: '#root',
+        data: {
+            theDate: '大寒',
+            showDialog: false,
+            date: '',
+            show: false,
+            showFloor: false,
+            angle: 0,
+            play: true,
+            dateValue: { currentDate: 0, dropTime: '', riseTime: '', nowDate: '' },
+            solarTerms: [],
+            queryDat: { houseId: 1, token: '', years: 2020 },
+            floorArr: [],
+            selectBuild: {},
+            name: ''
+        },
+        mounted() {
+            // -实例化对象
+            INT = new ThreeNode("container", {
+                camera: { // -相机初始位置
+                    position: [-54.9, 39.4, 50.7],
+                    fov: 60
+                },
+                controls: {
+                    target: [0, 0, 0],
+                    enableZoom: true,
+                    enablePan: false,
+                    enableRotate: true,
+                    enableDamping: false,
+                    dampingFactor: 0.15,
+                    distance: [10, 100],
+                    polarAngle: [0, Math.PI / 2.1]
+                },
+                render: {
+                    pixelRatio: 1,
+                    // -光照参数
+                    light: {
+                        color: '#ffffff', // -颜色
+                        intensity: 1.0, // -亮度
+                        width: 1024,// -阴影分辨率
+                        height: 512,// -阴影分辨率
+                        /** 阴影相机参数 **/
+                        near: 0.1,
+                        far: 600,
+                        left: -40,
+                        right: 40,
+                        top: 20,
+                        bottom: -20
+                    }
+                }
+            });
+            // 拿到代码注释解开，真实场景
+            // console.log(window.location.hash)
+            // let queryData = '';
+            // if (window.location.hash) {
+            //     queryData = window.location.hash.split('?')[1].split('&');
+            // } else {
+            //     queryData = window.location.href.split('?')[1].split('&');
+            // }
+            // this.queryDat = { houseId: queryData[0].split('=')[1], token: queryData[1].split('=')[1], years: new Date().getFullYear() }
+            instance = axios.create({
+                baseURL: 'https://www.fangjiadianpingbang.com/bds/api/v2/sunshine/',
+                timeout: 1000,
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    // this.queryDat.token
+                    'Authorization': 'eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNpUjbEOgjAURf_lzW3SFloLs4u7YxPzgJbgAKQtUUP4d1-MSlhvzjl3hQEz1FJXRkppqoIBLh3UIIVSVigBDO55oEFUtgsaA2-1Nrw0peY2GM19KJRH37aiORGcluZoj0049pfk44UufgyDPuKYr6_ZkzljSo8pdmROsb-dMSOtq9shB7X7Yw6Y-xbdntzI9s-ZBmOV_vxubwAAAP__.-BQQmft7COWSwMmL9E4TlUVVxfFc7mGjKznSc3Esmqk'
+                }
+            });
+            this.queryACT();
+            this.queryBuilding();
+        },
+        destroyed() {
+            INT.disposeRender();
+        },
+        methods: {
+            handleRL() {
+                INT.setSunPositionAnimate(false);
+                this.show = true;
+            },
+            handleDrag(type) {
+                this.play = type;
+                if (type) INT.setSunPositionAnimate(true);
+            },
+            // 请求示例
+            queryACT() {
+                instance.get(`/calendar?year=${this.queryDat.years}`).then(res => {
+                    if (res.data.code == 200) {
+                        this.solarTerms = res.data.data;
+                        this.solarTerms.forEach(item => {
+                            if (item.lable == '大寒') {
+                                this.setDate(new Date(Date.parse(`${this.queryDat.years}年${item.date}`.replace('年', '/').replace('月', '/').replace('日', ''))));
+                            }
+                        });
+                    }
+                })
+            },
+            // 请求示例
+            queryBuilding() {
+                instance.get(`/buildingGeometry?buildingId=${this.queryDat.houseId}`).then(res => {
+                    this.start();
+                    this.name = res.data.data.name;
+                    this.floorArr = res.data.data.data.map(item => {
+                        return Object.assign({}, item, { selectArr: [] })
+                    });
+                    // -创建建筑物
+                    INT.createBuildings(res.data.data, {
+                        topUrl: './images/blade.jpg', sideUrl: './images/blade.jpg',
+                        oddColor: '#f5f1e7', evenColor: '#BAB5A8', floorHeight: 0.2
+                    });
+                })
+            },
+            handleFloor(index, type) {
+                let oldArr = JSON.parse(JSON.stringify(this.floorArr));
+                if (type) {
+                    INT.cancelSunShineOfFloor(this.selectBuild.index + 1, index + 1);
+                    oldArr[this.selectBuild.index].selectArr.splice(oldArr[this.selectBuild.index].selectArr.indexOf(index), 1);
+                } else {
+                    INT.setSunShineOfFloor(this.selectBuild.index + 1, index + 1);
+                    oldArr[this.selectBuild.index].selectArr.push(index);
+                }
+                this.floorArr = oldArr;
+            },
+            handleBF() {
+                INT.setSunPositionAnimate(!this.play);
+                this.play = !this.play;
+            },
+            // 拖动时间事件
+            sliderChange(e) {
+                this.dateValue.currentDate = e;
+                let date = new Date(new Date(`${this.queryDat.years}/${this.dateValue.nowDate.replace('月', '/').replace('日', '')} ${this.dateValue.riseTime}`).getTime() + Number(e));
+                this.dateValue.showCurrentDate = `${date.getHours()}:${date.getMinutes()}`
+                INT.setSunPositionCurrentTime(this.dateValue.showCurrentDate)
+            },
+            handleClose() {
+                INT.setSunPositionAnimate(true);
+            },
+            // 选中楼层
+            handleClickFloor(e, i) {
+                this.selectBuild = Object.assign({}, e, { index: i });
+                this.showFloor = !this.showFloor;
+            },
+            // 选中指定日期
+            onConfirm(e) {
+                this.theDate = "";
+                this.show = false;
+                this.setDate(new Date(e));
+            },
+            // 阻止冒泡
+            touchmove(event) {
+                event.stopPropagation();
+            },
+            // 选中节气
+            dateClick(item) {
+                this.dateValue.currentDate = 0;
+                this.theDate = item.lable;
+                this.setDate(new Date(Date.parse(`${this.queryDat.years}年${item.date}`.replace('年', '/').replace('月', '/').replace('日', ''))));
+            },
+            // -设置日期方法
+            setDate(currentDate) {
+                this.dateValue.nowDate = `${currentDate.getMonth() + 1}月${currentDate.getDate()}日`;
+                INT.setSunPath(currentDate, (val) => {
+                    this.dateValue.dropTime = val.dropTime;
+                    this.dateValue.riseTime = val.riseTime;
+                    this.dateValue.showCurrentDate = val.riseTime;
+                    let dates = `${this.queryDat.years}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日`.replace('年', '/').replace('月', '/').replace('日', '');
+                    this.queryDat.currentTime = dates;
+                    this.dateValue.longTim = new Date(`${dates} ${val.dropTime}`).getTime() - new Date(`${dates} ${val.riseTime}`).getTime();
+                });
+            },
+            // 初始化模型
+            start() {
+                // -调用渲染方法
+                INT.render();
+                // -创建方位轮盘
+                INT.createBear({
+                    width: 20,
+                    height: 20,
+                    lineColor: '#fff',
+                    fontSize: 80,
+                    fontColor: '#fff'
+                });
+                // -创建地面
+                INT.createGround({
+                    imageUrl: './images/dp.jpg',
+                    width: 160, height: 160,
+                    xRepeat: 1, yRepeat: 1
+                });
+                // -创建天空盒子
+                INT.createSkybox({
+                    path: './images/skybox/', fog: {
+                        show: false,
+                        // color: '#FFFFFF',
+                        // density: 0.0025
+                    }
+                });
+                // -创建扩散动画
+                INT.createSpread({
+                    radius: 50, perTime: 2, color: '#79fffc', height: 2
+                });
+
+                INT.setPixelRatio(2);
+                /***  设置今日太阳路径   ***/
+                // this.setDate(new Date());
+                // 旋转视野
+                INT.setCameraAngleCallback(angle => {
+                    this.angle = angle / Math.PI * 180;
+                });
+                // 单击界面
+                INT.setMouseDownFunction(object => {
+                    if (object) {
+                        this.selectBuild = Object.assign({}, this.floorArr[object._buildIndex - 1], { index: object._buildIndex - 1 })
+                        this.showFloor = true;
+                    }
+                });
+                INT.setSunAnimateFunction(callback => {
+                    let dt = `${this.queryDat.years}/${this.dateValue.nowDate.replace('月', '/').replace('日', '')}`
+                    let date = new Date(new Date(`${dt} ${callback.currentTime}`).getTime());
+                    let date2 = new Date(new Date(`${dt} ${this.dateValue.riseTime}`).getTime());
+                    if (this.play) { this.dateValue.currentDate = date - date2; }
+                    this.dateValue.showCurrentDate = `${callback.currentTime}`;
+                })
+                INT.setDoubleClickEvent(callback => {
+                    let oldArr = JSON.parse(JSON.stringify(this.floorArr));
+                    if (this.floorArr[callback._buildIndex - 1].selectArr.includes(callback._floorIndex - 1)) {
+                        INT.cancelSunShineOfFloor(callback._buildIndex, callback._floorIndex);
+                        oldArr[callback._buildIndex - 1].selectArr.splice(oldArr[callback._buildIndex - 1].selectArr.indexOf(callback._floorIndex - 1), 1);
+                    } else {
+                        INT.setSunShineOfFloor(callback._buildIndex, callback._floorIndex);
+                        oldArr[callback._buildIndex - 1].selectArr.push(callback._floorIndex - 1);
+                    }
+                    this.floorArr = oldArr;
+                })
+            }
+        }
+    })
+</script>
+</body>
+
+</html>
